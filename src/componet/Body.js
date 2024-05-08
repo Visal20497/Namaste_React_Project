@@ -3,6 +3,7 @@ import RestaurantCard from './RestaurantCard.js'
 import Shimmer from './Shimmer.js';
 import { API_URL } from '../Utils/constant.js';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 function Body() {
   const resList = [
@@ -1897,7 +1898,7 @@ function Body() {
    let data= await fetch(API_URL)
    let data2=await data.json()
   //  console.log(data2)
-  console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants[0]?.info )
+  // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants[0]?.info )
    await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
    await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   }
@@ -1939,7 +1940,7 @@ function Body() {
         <div className='res-container'>
           {restaurantList.length===0 && <Shimmer/>} 
           {filterRestaurantList.length>0 && filterRestaurantList.map((restaurant)=>{
-           return <RestaurantCard  key={restaurant.info.id} resData={restaurant}/>
+           return <Link className='Link' key={restaurant.info.id} to={'/restaurant/'+restaurant.info.id}><RestaurantCard   resData={restaurant}/></Link>
           })}
         </div>
 
