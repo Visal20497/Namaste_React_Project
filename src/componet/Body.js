@@ -4,6 +4,8 @@ import Shimmer from './Shimmer.js';
 import { API_URL } from '../Utils/constant.js';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import useStatus from '../Utils/useStatus.js';
+
 
 function Body() {
   const resList = [
@@ -1919,6 +1921,8 @@ function Body() {
        toast("No Data found *")
     }
   }
+  const onlineStatus=useStatus()
+  if(onlineStatus===false) return <h3>Looks like your're off line!! Please check you internet connection;</h3>
 
   return (
     <div className='body'>

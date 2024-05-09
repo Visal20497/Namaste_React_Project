@@ -1,8 +1,12 @@
 import React from 'react'
+import User from './User'
 
 function About() {
   return (
-    <div>About</div>
+    <div>About:
+      <hr/>
+      <User name={"vishal_Maheshwari"}/>
+    </div>
   )
 }
 
