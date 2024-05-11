@@ -5,6 +5,8 @@ import { API_URL } from '../Utils/constant.js';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import useStatus from '../Utils/useStatus.js';
+import Button from '@mui/material/Button';
+
 
 
 function Body() {
@@ -1892,61 +1894,62 @@ function Body() {
       subtype: "basic",
     },
   ];
-  const [restaurantList,setRestaurantList]=useState([])
-  const [filterRestaurantList,setFilterRestaurantList]=useState([])
-  const [searchText,setSeearchText]=useState('')
 
-   async function getData(){
-   let data= await fetch(API_URL)
-   let data2=await data.json()
-  //  console.log(data2)
-  // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants[0]?.info )
-   await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-   await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+  const [restaurantList, setRestaurantList] = useState([])
+  const [filterRestaurantList, setFilterRestaurantList] = useState([])
+  const [searchText, setSeearchText] = useState('')
+
+  async function getData() {
+    let data = await fetch(API_URL)
+    let data2 = await data.json()
+    //  console.log(data2)
+    // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants[0]?.info )
+    await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   }
-  useEffect(()=>{
-      getData()
-  },[])
+  useEffect(() => {
+    getData()
+  }, [])
   // console.log("hello",restaurantList)
-  function searchHandler(){
-    let filterData=restaurantList.filter((item)=>{
-       return (item.info.name.toLowerCase().includes(searchText.toLowerCase()))
+  function searchHandler() {
+    let filterData = restaurantList.filter((item) => {
+      return (item.info.name.toLowerCase().includes(searchText.toLowerCase()))
     })
-    if(filterData.length>0){
+    if (filterData.length > 0) {
 
       setFilterRestaurantList(filterData)
     }
-    else{
-       setFilterRestaurantList(filterRestaurantList)
-       toast("No Data found *")
+    else {
+      setFilterRestaurantList(filterRestaurantList)
+      toast("No Data found *")
     }
   }
-  const onlineStatus=useStatus()
-  if(onlineStatus===false) return <h3>Looks like your're off line!! Please check you internet connection;</h3>
+  const onlineStatus = useStatus()
+  if (onlineStatus === false) return <h3>Looks like your're off line!! Please check you internet connection;</h3>
 
   return (
     <div className='body'>
-      <div className='Search'>
-        <input type='Search' className='Search_input' placeholder='Enter the Restaurant..' value={searchText}
-        onChange={(e)=>{setSeearchText(e.target.value)}}/>
-        <button className='Search_button' onClick={searchHandler}>Search</button>
+      <div className='Search p-4  flex'>
+        <input type='Search' className='Search_input border border-solid border-black' placeholder='Enter the Restaurant..' value={searchText}
+          onChange={(e) => { setSeearchText(e.target.value) }} />
+      <Button variant="contained" color="secondary" className='Search_button p-1 mx-2 !important' onClick={searchHandler}>Search</Button>
         <div className='filter'>
-          <button className='filter_button' onClick={()=>{
-            let filter=restaurantList.filter((item)=>{
+          <Button variant="contained" className='filter_button p-1 mx-1 !important' onClick={() => {
+            let filter = restaurantList.filter((item) => {
               return item.info.avgRating > 4.2
             })
             setFilterRestaurantList(filter)
-          }}>Top Rated Restaurant</button>
-          <button className='Reset_button' onClick={()=>{window.location.reload()}}>Reset All</button>
+          }}>Top Rated Restaurant</Button>
+          <Button variant="contained" className='Reset_button p-1 mx-1 !important ' onClick={() => { window.location.reload() }}>Reset All</Button>
         </div>
       </div>
-       
-        <div className='res-container'>
-          {restaurantList.length===0 && <Shimmer/>} 
-          {filterRestaurantList.length>0 && filterRestaurantList.map((restaurant)=>{
-           return <Link className='Link' key={restaurant.info.id} to={'/restaurant/'+restaurant.info.id}><RestaurantCard   resData={restaurant}/></Link>
-          })}
-        </div>
+
+      <div className='res-container flex flex-wrap justify-center '>
+        {restaurantList.length === 0 && <Shimmer />}
+        {filterRestaurantList.length > 0 && filterRestaurantList.map((restaurant) => {
+          return <Link className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}><RestaurantCard resData={restaurant} /></Link>
+        })}
+      </div>
 
     </div>
   )

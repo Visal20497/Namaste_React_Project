@@ -1,22 +1,25 @@
-import React from 'react'
-import Header from './componet/Header'
-import Body from './componet/Body'
+import React, { lazy, Suspense } from 'react'
+import Header from './Component/Header.js'
+import Body from './Component/Body.js'
 import { Toaster } from 'react-hot-toast'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
-import About from './componet/About'
-import Cart from './componet/Cart'
-import Contact from './componet/Contact'
-import Error from './componet/Error';
-import RestaurantMenu from './componet/RestaurantMenu'
+import About from './Component/About.js'
+import Cart from './Component/Cart.js'
+import Contact from './Component/Contact.js'
+import Error from './Component/Error.js';
+import RestaurantMenu from './Component/RestaurantMenu.js'
+
+
+const Grocery = lazy(() => import('./Component/Grocery.js'))
 
 export const appRouter = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    children:[
+    children: [
       {
-        path:'/',
-        element:<Body/>
+        path: '/',
+        element: <Body />
       },
       {
         path: '/about',
@@ -31,28 +34,32 @@ export const appRouter = createBrowserRouter([
         element: <Contact />
       },
       {
+        path: '/grocery',
+        element: <Suspense fallback={<h1>Loading...</h1>}><Grocery /></Suspense>
+      },
+      {
         path: '/*',
-        element: <Error/>
+        element: <Error />
       },
       {
         path: '/restaurant/:resId',
-        element:<RestaurantMenu/>
+        element: <RestaurantMenu />
       },
     ],
-    errorElement:<Error/>,
+    errorElement: <Error />,
   }
- 
+
 ])
 function App() {
   return (
     <div>
-      <Toaster/>
-      <Header/>
-      <Outlet/>
+      <Toaster />
+      <Header />
+      <Outlet />
     </div>
   )
 }
 
 
 
-export default  App
+export default App
