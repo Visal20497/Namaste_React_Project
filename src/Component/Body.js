@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import RestaurantCard from './RestaurantCard.js'
+import RestaurantCard,{withPromotedlevel} from './RestaurantCard.js'
 import Shimmer from './Shimmer.js';
 import { API_URL } from '../Utils/constant.js';
 import toast from 'react-hot-toast';
@@ -1898,12 +1898,13 @@ function Body() {
   const [restaurantList, setRestaurantList] = useState([])
   const [filterRestaurantList, setFilterRestaurantList] = useState([])
   const [searchText, setSeearchText] = useState('')
+  const RestaurantCardPromoted=withPromotedlevel(RestaurantCard)
 
   async function getData() {
     let data = await fetch(API_URL)
     let data2 = await data.json()
     //  console.log(data2)
-    // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants[0]?.info )
+    // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants )
     await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
     await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   }
@@ -1947,7 +1948,9 @@ function Body() {
       <div className='res-container flex flex-wrap justify-center '>
         {restaurantList.length === 0 && <Shimmer />}
         {filterRestaurantList.length > 0 && filterRestaurantList.map((restaurant) => {
-          return <Link className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}><RestaurantCard resData={restaurant} /></Link>
+          return <Link className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}>
+           {restaurant.info.avgRating>4.3 ?<RestaurantCardPromoted resData={restaurant}/>:<RestaurantCard resData={restaurant} />}
+            </Link>
         })}
       </div>
 
