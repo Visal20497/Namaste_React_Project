@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import RestaurantCard,{withPromotedlevel} from './RestaurantCard.js'
+import RestaurantCard, { withPromotedlevel } from './RestaurantCard.js'
 import Shimmer from './Shimmer.js';
 import { API_URL } from '../Utils/constant.js';
 import toast from 'react-hot-toast';
@@ -1897,8 +1897,8 @@ function Body() {
 
   const [restaurantList, setRestaurantList] = useState([])
   const [filterRestaurantList, setFilterRestaurantList] = useState([])
-  const [searchText, setSeearchText] = useState('')
-  const RestaurantCardPromoted=withPromotedlevel(RestaurantCard)
+  const [searchText, setSearchText] = useState('')
+  const RestaurantCardPromoted = withPromotedlevel(RestaurantCard)
 
   async function getData() {
     let data = await fetch(API_URL)
@@ -1912,28 +1912,31 @@ function Body() {
     getData()
   }, [])
   // console.log("hello",restaurantList)
-  function searchHandler() {
-    let filterData = restaurantList.filter((item) => {
-      return (item.info.name.toLowerCase().includes(searchText.toLowerCase()))
-    })
-    if (filterData.length > 0) {
 
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      let filterData = restaurantList.filter((item) => {
+        return (item.info.name.toLowerCase().includes(searchText.toLowerCase()))
+      })
       setFilterRestaurantList(filterData)
+      if(searchText && filterData.length===0){
+        toast("No Data Found * ")
+      }
+    }, 900);
+    return () => {
+      clearTimeout(timer)
     }
-    else {
-      setFilterRestaurantList(filterRestaurantList)
-      toast("No Data found *")
-    }
-  }
+  }, [searchText])
   const onlineStatus = useStatus()
   if (onlineStatus === false) return <h3>Looks like your're off line!! Please check you internet connection;</h3>
 
   return (
     <div className='body'>
       <div className='Search p-4  flex'>
-        <input type='Search' className='Search_input border border-solid border-black' placeholder='Enter the Restaurant..' value={searchText}
-          onChange={(e) => { setSeearchText(e.target.value) }} />
-      <Button variant="contained" color="secondary" className='Search_button p-1 mx-2 !important' onClick={searchHandler}>Search</Button>
+        <input type='Search' className='Search_input border mx-2 p-1' placeholder='Enter the Restaurant..' value={searchText}
+          onChange={(e) => {
+            setSearchText(e.target.value)
+          }} />
         <div className='filter'>
           <Button variant="contained" className='filter_button p-1 mx-1 !important' onClick={() => {
             let filter = restaurantList.filter((item) => {
@@ -1949,8 +1952,8 @@ function Body() {
         {restaurantList.length === 0 && <Shimmer />}
         {filterRestaurantList.length > 0 && filterRestaurantList.map((restaurant) => {
           return <Link className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}>
-           {restaurant.info.avgRating>4.3 ?<RestaurantCardPromoted resData={restaurant}/>:<RestaurantCard resData={restaurant} />}
-            </Link>
+            {restaurant.info.avgRating > 4.3 ? <RestaurantCardPromoted resData={restaurant} /> : <RestaurantCard resData={restaurant} />}
+          </Link>
         })}
       </div>
 

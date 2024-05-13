@@ -8,6 +8,9 @@ import Cart from './Component/Cart.js'
 import Contact from './Component/Contact.js'
 import Error from './Component/Error.js';
 import RestaurantMenu from './Component/RestaurantMenu.js'
+import { Provider } from 'react-redux'
+import AppStore from './Utils/AppStore.js'
+
 
 
 const Grocery = lazy(() => import('./Component/Grocery.js'))
@@ -53,9 +56,11 @@ export const appRouter = createBrowserRouter([
 function App() {
   return (
     <div>
-      <Toaster />
-      <Header />
-      <Outlet />
+      <Provider store={AppStore}>
+        <Toaster />
+        <Header />
+        <Outlet />
+      </Provider>
     </div>
   )
 }
