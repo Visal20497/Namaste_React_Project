@@ -10,7 +10,7 @@ function RestaurantCard({resData}) {
    sla:{slaString} }=resData?.info
 
   return (
-   <div className='res_container m-3 p-4 w-[200px] bg-gray-100 h-[420px] rounded-lg hover:bg-gray-200'>
+   <div data-testid="resCard" className='res_container m-3 p-4 w-[200px] bg-gray-100 h-[420px] rounded-lg hover:bg-gray-200'>
      <div className='rescard'>
       <img alt={CDN_URL+cloudinaryImageId} className='resImg w-[100%] h-[170px] ' src={CDN_URL+ cloudinaryImageId}/>
       <h4 className='font-bold py-2 text-lg'>{name}</h4>

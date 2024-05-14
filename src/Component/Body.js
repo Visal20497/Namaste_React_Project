@@ -1903,7 +1903,7 @@ function Body() {
   async function getData() {
     let data = await fetch(API_URL)
     let data2 = await data.json()
-    //  console.log(data2)
+    //  console.log(data2,"hello")
     // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants )
     await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
     await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
@@ -1933,12 +1933,12 @@ function Body() {
   return (
     <div className='body'>
       <div className='Search p-4  flex'>
-        <input type='Search' className='Search_input border mx-2 p-1' placeholder='Enter the Restaurant..' value={searchText}
+        <input type='Search' className='Search_input border border-gray-300 mx-2 p-1' placeholder='Enter the Restaurant..' value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value)
           }} />
         <div className='filter'>
-          <Button variant="contained" className='filter_button p-1 mx-1 !important' onClick={() => {
+          <Button  data-testid="TopResButton" variant="contained" className='filter_button p-1 mx-1 !important' onClick={() => {
             let filter = restaurantList.filter((item) => {
               return item.info.avgRating > 4.2
             })
@@ -1951,7 +1951,7 @@ function Body() {
       <div className='res-container flex flex-wrap justify-center '>
         {restaurantList.length === 0 && <Shimmer />}
         {filterRestaurantList.length > 0 && filterRestaurantList.map((restaurant) => {
-          return <Link className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}>
+          return <Link  className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}>
             {restaurant.info.avgRating > 4.3 ? <RestaurantCardPromoted resData={restaurant} /> : <RestaurantCard resData={restaurant} />}
           </Link>
         })}
