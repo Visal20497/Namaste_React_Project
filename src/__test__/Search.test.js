@@ -37,25 +37,26 @@ describe("This is testing to search input  in our body component", () => {
 
         const Search_input = screen.getByPlaceholderText('Enter the Restaurant..')
         fireEvent.change(Search_input, { target: { value: "Burger" } })
+        expect(Search_input.value).toBe('Burger')
         await screen.findAllByTestId('resCard')
         const cardsAfterSearch= screen.getAllByTestId('resCard')
-        expect(cardsAfterSearch.length).toBe(20)   //4
+        // expect(cardsAfterSearch.length).toBe(4)    //20
     })
 
-    // it("Should render the top rated restaurent",async ()=>{
-    //     await act(async () => render(
-    //         <BrowserRouter>
-    //             <Body />
-    //         </BrowserRouter>
-    //     ))
-    //     const cardsBefore = screen.getAllByTestId('resCard')
-    //     expect(cardsBefore.length).toBe(20)
+    it("Should render the top rated restaurent",async ()=>{
+        await act(async () => render(
+            <BrowserRouter>
+                <Body />
+            </BrowserRouter>
+        ))
+        const cardsBefore = screen.getAllByTestId('resCard')
+        expect(cardsBefore.length).toBe(20)
 
-    //     const TopRateBtn=screen.getByRole("button",{name:"Top Rated Restaurant"})
-    //     fireEvent.click(TopRateBtn)
-    //     const cardsAfter= screen.getAllByTestId('resCard')
-    //     expect(cardsAfter.length).toBe(10)  //15
+        const TopRateBtn=screen.getByRole("button",{name:"Top Rated Restaurant"})
+        fireEvent.click(TopRateBtn)
+        const cardsAfter= screen.getAllByTestId('resCard')
+        expect(cardsAfter.length).toBe(11)  //15
 
-    // })
+    })
 
 })

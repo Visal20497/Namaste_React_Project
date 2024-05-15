@@ -7,7 +7,7 @@ function RestaurantCard({resData}) {
     avgRating,
     cuisines,
     costForTwo,
-   sla:{slaString} }=resData?.info
+   sla:{slaString} }=resData?.info 
 
   return (
    <div data-testid="resCard" className='res_container m-3 p-4 w-[200px] bg-gray-100 h-[420px] rounded-lg hover:bg-gray-200'>

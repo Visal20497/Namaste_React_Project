@@ -1901,17 +1901,21 @@ function Body() {
   const RestaurantCardPromoted = withPromotedlevel(RestaurantCard)
 
   async function getData() {
-    let data = await fetch(API_URL)
-    let data2 = await data.json()
-    //  console.log(data2,"hello")
-    // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants )
-    await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-    await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    try {
+      let data = await fetch(API_URL)
+      let data2 = await data.json()
+      //  console.log(data2)
+      // console.log(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants )
+      await setRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+      await setFilterRestaurantList(data2?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    } catch (error) {
+      console.log(error)
+    }
   }
   useEffect(() => {
     getData()
   }, [])
-  // console.log("hello",restaurantList)
+  // console.log(restaurantList)
 
   useEffect(() => {
     let timer = setTimeout(() => {
@@ -1919,14 +1923,14 @@ function Body() {
         return (item.info.name.toLowerCase().includes(searchText.toLowerCase()))
       })
       setFilterRestaurantList(filterData)
-      if(searchText && filterData.length===0){
+      if (searchText && filterData.length === 0) {
         toast("No Data Found * ")
       }
     }, 900);
     return () => {
       clearTimeout(timer)
     }
-  }, [searchText])
+  }, [searchText,restaurantList])
   const onlineStatus = useStatus()
   if (onlineStatus === false) return <h3>Looks like your're off line!! Please check you internet connection;</h3>
 
@@ -1938,7 +1942,7 @@ function Body() {
             setSearchText(e.target.value)
           }} />
         <div className='filter'>
-          <Button  data-testid="TopResButton" variant="contained" className='filter_button p-1 mx-1 !important' onClick={() => {
+          <Button data-testid="TopResButton" variant="contained" className='filter_button p-1 mx-1 !important' onClick={() => {
             let filter = restaurantList.filter((item) => {
               return item.info.avgRating > 4.2
             })
@@ -1949,9 +1953,9 @@ function Body() {
       </div>
 
       <div className='res-container flex flex-wrap justify-center '>
-        {restaurantList.length === 0 && <Shimmer />}
+        {restaurantList.length===0 && <Shimmer />}
         {filterRestaurantList.length > 0 && filterRestaurantList.map((restaurant) => {
-          return <Link  className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}>
+          return <Link className='Link' key={restaurant.info.id} to={'/restaurant/' + restaurant.info.id}>
             {restaurant.info.avgRating > 4.3 ? <RestaurantCardPromoted resData={restaurant} /> : <RestaurantCard resData={restaurant} />}
           </Link>
         })}

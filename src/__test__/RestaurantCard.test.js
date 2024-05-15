@@ -6,7 +6,7 @@ import Mock_Data from '../Mock/RestaurantCard.json'
 
 
 describe("This is testing for the restaurant component",()=>{
-    it("Should render the Restaurnat Card with the props",()=>{
+    it("should render RestaurantCard component with props Data",()=>{
         render(<RestaurantCard resData={Mock_Data}/>)
         let name=screen.getByText('Pizza Hut')
         expect(name).toBeInTheDocument()
